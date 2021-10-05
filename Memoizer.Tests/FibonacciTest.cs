@@ -9,8 +9,7 @@ namespace Memoizer.Tests
         [Memoize]
         public BigInteger Fibonacci(int n)
         {
-            if (n == 0) return 0;
-            if (n == 1) return 1;
+            if (n < 2) return n;
             return Fibonacci(n - 1) + Fibonacci(n - 2);
         }
 
@@ -28,7 +27,7 @@ namespace Memoizer.Tests
             res.Should().Be(expected);
         }
 
-        [Theory]         
+        [Theory]
         [InlineData(100, "354224848179261915075")]
         [InlineData(200, "280571172992510140037611932413038677189525")]
         [InlineData(300, "222232244629420445529739893461909967206666939096499764990979600")]
