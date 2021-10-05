@@ -8,7 +8,7 @@ This is a quick and easy way of adding [Memoization](https://en.wikipedia.org/wi
 
 Add the NuGet package to your project.
 
-```powershell
+```
 PM> Install-Package Memoizer.NETStandard
 ```
 ## Getting Started
