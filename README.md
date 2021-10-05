@@ -1,2 +1,1 @@
-# Memoizator
-Easy to use Memoize/Caching attribute implemented in C#
+[Memoization](https://en.wikipedia.org/wiki/Memoization) is an optimization technique used primarily to speed up computer programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again.
