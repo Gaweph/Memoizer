@@ -52,7 +52,7 @@ Fib(1000); // 0.013s
 public BigInteger Fib(int n)
 {
     if (n < 2) return n;
-    return RecursiveFib(n - 1) + RecursiveFib(n - 2);
+    return Fib(n - 1) + Fib(n - 2);
 }
 
 Fib(5); // 0.003s
