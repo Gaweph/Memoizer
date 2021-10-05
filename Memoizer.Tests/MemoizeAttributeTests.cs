@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-namespace Memoizator.Tests
+namespace Memoizer.Tests
 {
 
     public class MemoizeAttributeTests

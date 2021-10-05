@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Memoizator\Memoizator.csproj" />
+    <ProjectReference Include="..\Memoizer\Memoizer.csproj" />
   </ItemGroup>
 
 </Project>

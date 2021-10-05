@@ -2,7 +2,7 @@
 using Xunit;
 using System.Numerics;
 
-namespace Memoizator.Tests
+namespace Memoizer.Tests
 {
     public class FibonacciTest
     {

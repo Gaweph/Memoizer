@@ -4,7 +4,7 @@ using System.Linq;
 using AspectInjector.Broker;
 using Newtonsoft.Json;
 
-namespace Memoizator
+namespace Memoizer
 {
     /// <summary>
     /// Result of the method call is cached for future calls to method with equivalent input arguments
