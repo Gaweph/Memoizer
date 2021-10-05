@@ -57,8 +57,8 @@ namespace Memoizer.Tests
             var demo = new DemoClass();
 
             // ACT 
-            var res = demo.TestMethod("A");
-            var res2 = demo.TestMethod("B");
+            var res = demo.TestMethod("X");
+            var res2 = demo.TestMethod("Y");
 
             // ASSERT
             res.Should().Be(1);
