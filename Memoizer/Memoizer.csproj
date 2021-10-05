@@ -5,6 +5,7 @@
 	  <Authors>Gareth Williams</Authors>
 	  <PackageId>Memoizer.NETStandard</PackageId>
 	  <Description>Easy to use Memoize/Caching attribute implemented in C#</Description>
+	  <PackageProjectUrl>https://github.com/Gaweph/Memoizer</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
