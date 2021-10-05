@@ -63,4 +63,4 @@ Fib(100); // Come back tomorrow
 
 ```
 
-As you can see the use of Caching in this example allows usto actually work out the Fib of 100 in neglegeable time.
+As you can see the use of Caching in this example allows us to actually work out the Fib of 1000 in neglegeable time.
