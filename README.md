@@ -17,9 +17,9 @@ To add caching simply decorate a method with the `[Cache]` attribute.
 
 ```csharp
 
+// Result will be cached for the lifetime of this application
 [Cache]
 public string HelloWorld() => "Hello World!";
-
 
 // Result will be cached for 500 Milliseconds
 [Cache(500)]
