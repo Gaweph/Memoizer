@@ -22,11 +22,9 @@ public string HelloWorld() => "Hello World!";
 
 Calls to this method with matching arguments will now be cached meaning only the first call with a unique set or args will execute the internal code.
 
-## Why
+## Example
 
 There are many use cases where it is appropriate to cache the result of a method call.  A popular use case is a method that returns the Nth [Fibonacci](https://en.wikipedia.org/wiki/Fibonacci) number.  The time taken increases exponentially as you increase N.
-
-## Example
 
 ### With Caching
 ```csharp
