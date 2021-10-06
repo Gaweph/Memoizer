@@ -13,10 +13,10 @@ PM> Install-Package Memoizer.NETStandard
 ```
 ## Getting Started
 
-Decorate a method with the `[Memoize]` attribute.  
+To add caching simply decorate a method with the `[Memoize]` attribute.  
 
 ```csharp
-[Memoize] // <-- add method caching with this
+[Memoize]
 public string HelloWorld() => "Hello World!";
 ```
 
