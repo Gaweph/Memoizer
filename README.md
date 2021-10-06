@@ -13,11 +13,21 @@ PM> Install-Package Memoizer.NETStandard
 ```
 ## Getting Started
 
-To add caching simply decorate a method with the `[Memoize]` attribute.  
+To add caching simply decorate a method with the `[Cache]` attribute.  
 
 ```csharp
-[Memoize]
+
+[Cache]
 public string HelloWorld() => "Hello World!";
+
+
+// Result will be cached for 500 Milliseconds
+[Cache(500)]
+public string HelloWorld() => "500 Millisecond Cache";
+
+// Result will be cached for 5 seconds
+[Cache(5, Time.Second)]
+public string HelloWorld() => "5 Second Cache";
 ```
 
 Calls to this method with matching arguments will now be cached meaning only the first call with a unique set or args will execute the internal code.
@@ -28,7 +38,7 @@ There are many use cases where it is appropriate to cache the result of a method
 
 ### With Caching
 ```csharp
-[Memoize]
+[Cache]
 public BigInteger Fib(int n)
 {
     if (n < 2) return n;

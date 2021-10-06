@@ -6,7 +6,7 @@ namespace Memoizer.Tests
 {
     public class FibonacciTest
     {
-        [Memoize]
+        [Cache]
         public BigInteger Fibonacci(int n)
         {
             if (n < 2) return n;

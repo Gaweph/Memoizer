@@ -1,28 +1,29 @@
 ﻿using FluentAssertions;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Memoizer.Tests
 {
 
-    public class MemoizeAttributeTests
+    public class CacheAttributeTests
     {
         public class DemoClass
         {
             private int count = 0;
 
-            [Memoize]
+            [Cache]
             public int SimpleMethod() => ++count;
 
-            [Memoize]
+            [Cache]
             public int TestMethod(string str)
             {
                 count++;
                 return count;
             }
 
-            [Memoize]
+            [Cache]
             public int ComplexArgs
                 (
                 object obj,
@@ -32,6 +33,20 @@ namespace Memoizer.Tests
                 Guid guid,
                 string str
                 )
+            {
+                count++;
+                return count;
+            }
+
+            [Cache(500)]
+            public int HalfSecondCache(string str)
+            {
+                count++;
+                return count;
+            }
+
+            [Cache(1, Time.Second)]
+            public int OneSecondCache(string str)
             {
                 count++;
                 return count;
@@ -103,6 +118,74 @@ namespace Memoizer.Tests
             // ASSERT
             res.Should().Be(1);
             res2.Should().Be(1);
+        }
+
+        [Fact]
+        public async Task HalfSecondCache__Should_ReturnCachedResult_When_CacheNotExpired()
+        {
+            // ARRANGE
+            var demo = new DemoClass();
+            var str = "HalfSecondCache_200";
+
+            // ACT 
+            var res = demo.HalfSecondCache(str);
+            await Task.Delay(200);
+            var res2 = demo.HalfSecondCache(str);
+
+            // ASSERT
+            res.Should().Be(1);
+            res2.Should().Be(1);
+        }
+
+        [Fact]
+        public async Task HalfSecondCache__Should_ReturnNonCachedResult_When_CacheExpired()
+        {
+            // ARRANGE
+            var demo = new DemoClass();
+            var str = "HalfSecondCache_550";
+
+            // ACT 
+            var res = demo.HalfSecondCache(str);
+            await Task.Delay(550);
+            var res2 = demo.HalfSecondCache(str);
+
+            // ASSERT
+            res.Should().Be(1);
+            res2.Should().Be(2);
+        }
+
+        [Fact]
+        public async Task OneSecondCache__Should_ReturnCachedResult_When_CacheNotExpired()
+        {
+            // ARRANGE
+            var demo = new DemoClass();
+            var str = "OneSecondCache_500";
+
+            // ACT 
+            var res = demo.OneSecondCache(str);
+            await Task.Delay(500);
+            var res2 = demo.OneSecondCache(str);
+
+            // ASSERT
+            res.Should().Be(1);
+            res2.Should().Be(1);
+        }
+
+        [Fact]
+        public async Task OneSecondCache__Should_ReturnNonCachedResult_When_CacheExpired()
+        {
+            // ARRANGE
+            var demo = new DemoClass();
+            var str = "OneSecondCache_1200";
+
+            // ACT 
+            var res = demo.OneSecondCache(str);
+            await Task.Delay(1200);
+            var res2 = demo.OneSecondCache(str);
+
+            // ASSERT
+            res.Should().Be(1);
+            res2.Should().Be(2);
         }
     }
 }
