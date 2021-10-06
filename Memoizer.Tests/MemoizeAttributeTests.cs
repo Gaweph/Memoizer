@@ -13,6 +13,9 @@ namespace Memoizer.Tests
             private int count = 0;
 
             [Memoize]
+            public int SimpleMethod() => ++count;
+
+            [Memoize]
             public int TestMethod(string str)
             {
                 count++;
@@ -33,6 +36,22 @@ namespace Memoizer.Tests
                 count++;
                 return count;
             }
+        }
+
+
+        [Fact]
+        public void SimpleMethod__Should_ReturnCachedResult_When_Second_Call()
+        {
+            // ARRANGE
+            var demo = new DemoClass();
+
+            // ACT 
+            var res = demo.SimpleMethod();
+            var res2 = demo.SimpleMethod();
+
+            // ASSERT
+            res.Should().Be(1);
+            res2.Should().Be(1);
         }
 
         [Fact]

@@ -16,12 +16,8 @@ PM> Install-Package Memoizer.NETStandard
 Decorate a method with the `[Memoize]` attribute.  
 
 ```csharp
-[Memoize] // <-- add this
-public BigInteger Fib(int n)
-{
-    if (n < 2) return n;
-    return Fib(n - 1) + Fib(n - 2);
-}
+[Memoize] // <-- add method caching with this
+public string HelloWorld() => "Hello World!";
 ```
 
 Calls to this method with matching arguments will now be cached meaning only the first call with a unique set or args will execute the internal code.
