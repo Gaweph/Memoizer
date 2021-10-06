@@ -15,15 +15,15 @@ namespace Memoizer
         {
             MilliSeconds = null;
         }
-        public CacheAttribute(int milliSeconds, Time unit = Time.Millisecond)
+        public CacheAttribute(int expiry, Time unit = Time.Millisecond)
         {
             if (unit == Time.Second)
             {
-                MilliSeconds = milliSeconds * 1000;
+                MilliSeconds = expiry * 1000;
             }
             else
             {
-                MilliSeconds = milliSeconds;
+                MilliSeconds = expiry;
             }
         }
     }
