@@ -14,7 +14,10 @@ public string HelloWorld() => "500 Millisecond Cache";
 // Result will be cached for 5 seconds
 [Cache(5, Time.Second)]
 public string HelloWorld() => "5 Second Cache";
+
 ```
+
+Calls to cached method with matching arguments will be cached meaning only the first call with a unique set or args will execute the internal code.
 
 ## Installation
 
@@ -24,7 +27,6 @@ Add the NuGet package to your project.
 PM> Install-Package Memoizer.NETStandard
 ```
 
-Calls to this method with matching arguments will now be cached meaning only the first call with a unique set or args will execute the internal code.
 
 ## Why
 
