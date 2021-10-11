@@ -1,5 +1,8 @@
 # Memoizer
 
+[![Version](https://img.shields.io/nuget/vpre/Memoizer.NETStandard.svg)](https://www.nuget.org/packages/Memoizer.NETStandard)
+[![Downloads](https://img.shields.io/nuget/dt/Memoizer.NETStandard.svg)](https://www.nuget.org/packages/Memoizer.NETStandard)
+
 This is a quick and easy way of adding [Memoization](https://en.wikipedia.org/wiki/Memoization)/Caching to your C# project.
 
 ```csharp
