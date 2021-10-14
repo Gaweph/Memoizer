@@ -1,44 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+//using System.Runtime.Serialization.Json;
+//using System.Text;
 using AspectInjector.Broker;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
+//using Json.Net
 
 namespace Memoizer
 {
+
     [Aspect(Scope.Global)]
     public class MemoizeAspect
     {
-        private JsonSerializerSettings _settings = new JsonSerializerSettings
-        {
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-        };
-        private Dictionary<string, (DateTimeOffset? Expiry, object CachedValue)> cachedResults = new Dictionary<string, (DateTimeOffset? Expiry, object cachedValue)>();
+        private readonly CacheManager cache = new CacheManager();
 
-        private bool TryGetCachedValue(string key, out object cachedValue)
+        public string GetKey(Type type, string methodName, object[] arguments)
         {
-            var hasValue = cachedResults.TryGetValue(key, out var value);
-            if(hasValue)
-            {
-                if(value.Expiry == null || value.Expiry > DateTimeOffset.UtcNow)
-                {
-                    cachedValue = value.CachedValue;
-                    return true;
-                }
-            }
-            cachedValue = null;
-            return false;
+            return $"{type.FullName}-{methodName}-{SerializeHelper.Serialize(arguments)}";
         }
-
-        private void AddCachedValue(string key, CacheAttribute cacheAttribute, object cachedValue)
-        {
-            var expiry =
-                cacheAttribute.MilliSeconds == null ?
-                    null :
-                    (DateTimeOffset?)DateTimeOffset.UtcNow.AddMilliseconds((int)cacheAttribute.MilliSeconds);
-            cachedResults[key] = (Expiry: expiry, CachedValue: cachedValue);
-        }
-
+        
         [Advice(Kind.Around, Targets = Target.Method)]
         public object HandleMethod(
                [Argument(Source.Name)] string name,
@@ -46,21 +27,20 @@ namespace Memoizer
                [Argument(Source.Target)] Func<object[], object> method,
                [Argument(Source.Triggers)] Attribute[] triggers)
         {
-            var type = method.Target.GetType().FullName;
-            var key = $"{type}-{name}-{JsonConvert.SerializeObject(arguments, _settings)}";
-
-            lock (cachedResults)
+            var key = GetKey(method.Target.GetType(), name, arguments);
+            lock (cache)
             {
-                if (TryGetCachedValue(key, out var cachedValue))
+                if (cache.TryGetCachedValue(key, out var cachedValue))
                 {
                     return cachedValue;
                 }
 
-                var cachedAttribute = triggers.OfType<CacheAttribute>().First();
                 var result = method(arguments);
-                AddCachedValue(key, cachedAttribute, result);
+                var expiry = triggers.OfType<CacheAttribute>().First().ExpiryFromNow;
+                cache.AddCachedValue(key, result, expiry);
                 return result;
             }
         }
     }
+
 }
