@@ -10,21 +10,23 @@ namespace Memoizer
     [Injection(typeof(MemoizeAspect))]
     public class CacheAttribute : Attribute
     {
-        public readonly int? MilliSeconds;
+        private readonly int? MilliSeconds;
         public CacheAttribute()
         {
             MilliSeconds = null;
         }
-        public CacheAttribute(int milliSeconds, Time unit = Time.Millisecond)
+        public CacheAttribute(int expiry, Time unit = Time.Millisecond)
         {
             if (unit == Time.Second)
             {
-                MilliSeconds = milliSeconds * 1000;
+                MilliSeconds = expiry * 1000;
             }
             else
             {
-                MilliSeconds = milliSeconds;
+                MilliSeconds = expiry;
             }
         }
+
+        public DateTimeOffset? ExpiryFromNow => MilliSeconds == null ? null : (DateTimeOffset?)DateTimeOffset.UtcNow.AddMilliseconds((int)MilliSeconds);
     }
 }

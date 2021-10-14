@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="AspectInjector" Version="2.6.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <PackageReference Include="System.Text.Json" Version="5.0.2" />
   </ItemGroup>
 
 </Project>

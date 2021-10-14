@@ -51,6 +51,13 @@ namespace Memoizer.Tests
                 count++;
                 return count;
             }
+
+            [Cache]
+            public int ObjectArgs(object obj)
+            {
+                count++;
+                return count;
+            }
         }
 
 
@@ -187,5 +194,39 @@ namespace Memoizer.Tests
             res.Should().Be(1);
             res2.Should().Be(2);
         }
+
+        private class ObjectWithReference
+        {
+            public string Name { get; set; }
+            public ObjectWithReference Object { get; set; }
+        }
+        [Fact]
+        public async Task ObjectArgs__Should_ReturnCachedResult_When_SelfReferencingObject()
+        {
+            // ARRANGE
+            var demo = new DemoClass();
+
+            var objA = new ObjectWithReference
+            {
+                Name = "Object a"
+            };
+
+            var objB = new ObjectWithReference
+            {
+                Name = "Object B",
+                Object = objA
+            };
+
+            objA.Object = objB; // self referencing - referencing ObjA with reference ObjA again
+
+            // ACT 
+            var res = demo.ObjectArgs(objA);
+            var res2 = demo.ObjectArgs(objA);
+
+            // ASSERT
+            res.Should().Be(1);
+            res2.Should().Be(1);
+        }
+        
     }
 }

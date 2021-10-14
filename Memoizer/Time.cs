@@ -3,6 +3,6 @@
     public enum Time
     {
         Millisecond,
-        Second        
+        Second
     }
 }
