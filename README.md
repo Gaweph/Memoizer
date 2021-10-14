@@ -2,24 +2,13 @@
 
 This is a quick and easy way of adding [Memoization](https://en.wikipedia.org/wiki/Memoization)/Caching to your C# project.
 
-[Memoization](https://en.wikipedia.org/wiki/Memoization) is an optimization technique used primarily to speed up computer programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again.
-
-## Installation
-
-Add the NuGet package to your project.
-
-```
-PM> Install-Package Memoizer.NETStandard
-```
-## Getting Started
-
-To add caching simply decorate a method with the `[Cache]` attribute.  
+[![Version](https://img.shields.io/nuget/vpre/Memoizer.NETStandard.svg)](https://www.nuget.org/packages/Memoizer.NETStandard)
+[![Downloads](https://img.shields.io/nuget/dt/Memoizer.NETStandard.svg)](https://www.nuget.org/packages/Memoizer.NETStandard)
 
 ```csharp
-
+// Result will be cached for the lifetime of this application
 [Cache]
 public string HelloWorld() => "Hello World!";
-
 
 // Result will be cached for 500 Milliseconds
 [Cache(500)]
@@ -28,11 +17,25 @@ public string HelloWorld() => "500 Millisecond Cache";
 // Result will be cached for 5 seconds
 [Cache(5, Time.Second)]
 public string HelloWorld() => "5 Second Cache";
+
 ```
 
-Calls to this method with matching arguments will now be cached meaning only the first call with a unique set or args will execute the internal code.
+Calls to cached method with matching arguments will be cached meaning only the first call with a unique set or args will execute the internal code.
 
-## Example
+## Installation
+
+Add the NuGet package to your project.
+
+```
+PM> Install-Package Memoizer.NETStandard
+```
+
+
+## Why
+
+[Memoization](https://en.wikipedia.org/wiki/Memoization) is an optimization technique used primarily to speed up computer programs by storing the results of expensive function calls and returning the cached result when the same inputs occur again.
+
+## Usage Example
 
 There are many use cases where it is appropriate to cache the result of a method call.  A popular use case is a method that returns the Nth [Fibonacci](https://en.wikipedia.org/wiki/Fibonacci) number.  The time taken increases exponentially as you increase N.
 
@@ -60,10 +63,9 @@ public BigInteger Fib(int n)
 }
 
 Fib(5); // 0.003s
-Fib(25); // 0.007s
-Fib(40); // 8s
 Fib(50); // 977s (16 Minutes)
-Fib(100); // Come back tomorrow
+Fib(300); // Come back tomorrow
+Fib(1000); // Years!!
 
 ```
 
