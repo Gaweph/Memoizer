@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	  <Authors>Gareth Williams</Authors>
-	  <PackageId>Memoizer.NET</PackageId>
+	  <PackageId>Memoizer.NETStandard</PackageId>
 	  <Description>Easy to use Memoize/Caching attribute implemented in C#</Description>
 	  <PackageProjectUrl>https://github.com/Gaweph/Memoizer</PackageProjectUrl>
   </PropertyGroup>
