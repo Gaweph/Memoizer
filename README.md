@@ -27,7 +27,7 @@ Calls to cached method with matching arguments will be cached meaning only the f
 Add the NuGet package to your project.
 
 ```
-PM> Install-Package Memoizer.NETStandard
+PM> Install-Package Memoizer.NET
 ```
 
 
