@@ -1,4 +1,4 @@
-name: Push Github Nuget
+name: Publish Nugets
 
 on:
   push:
@@ -24,7 +24,7 @@ jobs:
       run: dotnet test --configuration Release --no-build --verbosity normal      
     - name: Pack
       run: dotnet pack --configuration Release /p:Version=${PACKAGE_VERSION} --no-build --output .
-    - name: Push
-      run: dotnet nuget push Memoizer.NETStandard.${PACKAGE_VERSION}.nupkg --source https://nuget.pkg.github.com/gaweph/index.json --api-key ${GITHUB_TOKEN}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: PushNuget
+      run: dotnet nuget push Memoizer.NETStandard.${PACKAGE_VERSION}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{secrets.PUBLISH_TO_NUGET_ORG}}   
+    - name: PushGithub
+      run: dotnet nuget push Memoizer.NETStandard.${PACKAGE_VERSION}.nupkg --source https://nuget.pkg.github.com/gaweph/index.json --api-key ${{secrets.GITHUB_TOKEN}}
