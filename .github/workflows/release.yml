@@ -1,5 +1,10 @@
 name: Publish Nuget
 
+on:
+  push:
+    tags:        
+      - placeholder.temp
+
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
