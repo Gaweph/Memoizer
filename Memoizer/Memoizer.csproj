@@ -6,6 +6,7 @@
 	<PackageId>Memoizer.NETStandard</PackageId>
 	<Description>Easy to use Memoize/Caching attribute implemented in C#</Description>
 	<RepositoryType>git</RepositoryType>
+	<RepositoryUrl>https://github.com/Gaweph/Memoizer</RepositoryUrl>	  
 	<PackageProjectUrl>https://github.com/Gaweph/Memoizer</PackageProjectUrl>
   </PropertyGroup>
 
