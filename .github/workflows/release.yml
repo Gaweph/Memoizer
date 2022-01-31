@@ -2,8 +2,11 @@ name: Publish Nuget
 
 on:
   push:
-    tags:        
-      - placeholder.temp
+    branches:
+    - main
+  pull_request:
+    branches:
+    - main
 
 jobs:
   build_and_test:
