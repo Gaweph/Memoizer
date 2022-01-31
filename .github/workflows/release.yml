@@ -6,16 +6,16 @@ on:
     - main
     
 jobs:
-  build_and_test:
+  pack_and_push:
     runs-on: ubuntu-latest
-    env:
-      PACKAGE_VERSION: "$(date +'%Y.%m.%-d').${GITHUB_RUN_NUMBER}"
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.*
+    - name: Set PACKAGE_VERSION variable
+      run: echo "PACKAGE_VERSION=$(date +'%Y.%m.%-d').${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
