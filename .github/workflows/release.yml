@@ -1,9 +1,5 @@
 name: Publish Nuget
 
-on:
-  pull_request:
-    branches: [ main ]
-
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
