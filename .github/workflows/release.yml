@@ -21,7 +21,7 @@ jobs:
     - name: Test
       run: dotnet test --configuration Release --no-build --verbosity normal      
     - name: Set VERSION variable
-      run: echo "VERSION=2022.1.31.1" >> $GITHUB_ENV
+      run: echo "VERSION=$(date +'%Y.%m.%d').${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
     - name: Pack
       run: dotnet pack --configuration Release /p:Version=${VERSION} --no-build --output .
     - name: Push
