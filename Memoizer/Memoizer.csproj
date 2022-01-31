@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-	  <Authors>Gareth Williams</Authors>
-	  <PackageId>Memoizer.NETStandard</PackageId>
-	  <Description>Easy to use Memoize/Caching attribute implemented in C#</Description>
-	  <PackageProjectUrl>https://github.com/Gaweph/Memoizer</PackageProjectUrl>
+	<TargetFramework>netstandard2.0</TargetFramework>
+	<Authors>Gareth Williams</Authors>
+	<PackageId>Memoizer.NETStandard</PackageId>
+	<Description>Easy to use Memoize/Caching attribute implemented in C#</Description>
+	<RepositoryType>git</RepositoryType>
+	<PackageProjectUrl>https://github.com/Gaweph/Memoizer</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspectInjector" Version="2.6.0" />
-    <PackageReference Include="System.Text.Json" Version="5.0.2" />
+	<PackageReference Include="AspectInjector" Version="2.6.0" />
+	<PackageReference Include="System.Text.Json" Version="5.0.2" />
   </ItemGroup>
 
 </Project>
