@@ -4,10 +4,12 @@ on:
   push:
     branches:
     - main
-
+    
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
+    env:
+      PACKAGE_VERSION: "$(date +'%Y.%m.%-d').${GITHUB_RUN_NUMBER}"
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
@@ -20,11 +22,9 @@ jobs:
       run: dotnet build --configuration Release --no-restore
     - name: Test
       run: dotnet test --configuration Release --no-build --verbosity normal      
-    - name: Set VERSION variable
-      run: echo "VERSION=$(date +'%Y.%m.%d').${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
     - name: Pack
-      run: dotnet pack --configuration Release /p:Version=${VERSION} --no-build --output .
+      run: dotnet pack --configuration Release /p:Version=${PACKAGE_VERSION} --no-build --output .
     - name: Push
-      run: dotnet nuget push Memoizer.NETStandard.${VERSION}.nupkg --source https://nuget.pkg.github.com/gaweph/index.json --api-key ${GITHUB_TOKEN}
+      run: dotnet nuget push Memoizer.NETStandard.${PACKAGE_VERSION}.nupkg --source https://nuget.pkg.github.com/gaweph/index.json --api-key ${GITHUB_TOKEN}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
