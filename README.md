@@ -4,6 +4,7 @@ This is a quick and easy way of adding [Memoization](https://en.wikipedia.org/wi
 
 [![Version](https://img.shields.io/nuget/vpre/Memoizer.NETStandard.svg)](https://www.nuget.org/packages/Memoizer.NETStandard)
 [![Downloads](https://img.shields.io/nuget/dt/Memoizer.NETStandard.svg)](https://www.nuget.org/packages/Memoizer.NETStandard)
+[![Test Conversion](https://github.com/Gaweph/Memoizer/actions/workflows/pr-build-and-test.yml/badge.svg)](https://github.com/Gaweph/Memoizer/actions/workflows/pr-build-and-test.yml)
 
 ```csharp
 // Result will be cached for the lifetime of this application
