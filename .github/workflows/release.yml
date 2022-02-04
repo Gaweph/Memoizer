@@ -3,7 +3,10 @@ name: Publish Nugets
 on:
   push:
     branches:
-    - main
+    - main    
+    paths:
+      - "Memoizer/**"
+      - "Memoizer.sln"
     
 jobs:
   pack_and_push:
