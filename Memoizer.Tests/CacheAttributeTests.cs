@@ -227,6 +227,28 @@ namespace Memoizer.Tests
             res.Should().Be(1);
             res2.Should().Be(1);
         }
+     
         
+        [Fact]
+        public void Cache_is_not_used_for_different_instances_of_same_type()
+        {
+            var one = new MyClass("hello");
+            var another = new MyClass("how are you?");
+
+            one.Get().Should().NotBeEquivalentTo(another.Get());
+        }
+
+        private class MyClass
+        {
+            private readonly string payload;
+
+            public MyClass(string payload)
+            {
+                this.payload = payload;
+            }
+
+            [Cache]
+            public string Get() => payload;
+        }
     }
 }

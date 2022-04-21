@@ -15,9 +15,9 @@ namespace Memoizer
     {
         private readonly CacheManager cache = new CacheManager();
 
-        public string GetKey(Type type, string methodName, object[] arguments)
+        private string GetKey(object target, Type type, string methodName, object[] arguments)
         {
-            return $"{type.FullName}-{methodName}-{SerializeHelper.Serialize(arguments)}";
+            return $"{target.GetHashCode()}-{type.FullName}-{methodName}-{SerializeHelper.Serialize(arguments)}";
         }
         
         [Advice(Kind.Around, Targets = Target.Method)]
@@ -27,7 +27,8 @@ namespace Memoizer
                [Argument(Source.Target)] Func<object[], object> method,
                [Argument(Source.Triggers)] Attribute[] triggers)
         {
-            var key = GetKey(method.Target.GetType(), name, arguments);
+            var target = method.Target;
+            var key = GetKey(target, target.GetType(), name, arguments);
             lock (cache)
             {
                 if (cache.TryGetCachedValue(key, out var cachedValue))
