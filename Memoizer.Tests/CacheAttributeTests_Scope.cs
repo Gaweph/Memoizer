@@ -4,22 +4,32 @@ using Xunit;
 
 namespace Memoizer.Tests
 {
+    public static class DemoExtensionClass
+    {
+        [Cache]
+        public static (string Payload, Guid Guid) ExtensionMethod(this CacheAttributeTests_Scope.DemoScopeClass obj)
+        {
+            obj.Count++;
+            return (obj.Payload, Guid.NewGuid());
+        }
+    }
+
     public class CacheAttributeTests_Scope
     {
-        private class DemoScopeClass
+        public class DemoScopeClass
         {
-            private readonly string _payload;
+            public readonly string Payload;
             public int Count = 0;
             public DemoScopeClass(string payload)
             {
-                _payload = payload;
+                Payload = payload;
             }
 
             [Cache]
             public (string Payload, Guid Guid) Get()
             {
                 Count++;
-                return (_payload, Guid.NewGuid());
+                return (Payload, Guid.NewGuid());
             }
 
             [Cache]
@@ -27,6 +37,7 @@ namespace Memoizer.Tests
             {
                 return Guid.NewGuid();
             }
+
         }
 
         [Fact]
@@ -56,6 +67,25 @@ namespace Memoizer.Tests
 
             // ASSERT
             res.Should().Be(res2);
+        }
+
+        [Fact]
+        public void ExtensionMethod__Should_ReturnCorrectInstanceOfCache()
+        {
+            // ARRANGE
+            var demo = new DemoScopeClass("abc");
+            var demo2 = new DemoScopeClass("xyz");
+
+            // ACT
+            var res = demo.ExtensionMethod();
+            var res2 = demo2.ExtensionMethod();
+
+            // ASSERT
+            demo.Count.Should().Be(1);
+            demo2.Count.Should().Be(1);
+            res.Payload.Should().Be("abc");
+            res2.Payload.Should().Be("xyz");
+            res.Guid.Should().NotBe(res2.Guid);
         }
         
     }
