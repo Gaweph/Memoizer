@@ -6,6 +6,7 @@ using System.Linq;
 using AspectInjector.Broker;
 //using Newtonsoft.Json;
 //using Json.Net
+using System.Runtime.Serialization;
 
 namespace Memoizer
 {
@@ -14,10 +15,14 @@ namespace Memoizer
     public class MemoizeAspect
     {
         private readonly CacheManager cache = new CacheManager();
-
+        private readonly ObjectIDGenerator idGenerator = new ObjectIDGenerator();
         private string GetKey(object target, Type type, string methodName, object[] arguments)
         {
-            var id = target?.GetHashCode() ?? 0;
+            long id = 0;
+            if (target != null)
+            {
+                id = idGenerator.GetId(target, out var firstTime);
+            }
             return $"{id}-{type.FullName}-{methodName}-{SerializeHelper.Serialize(arguments)}";
         }
 
