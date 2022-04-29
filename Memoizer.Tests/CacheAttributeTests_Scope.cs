@@ -40,7 +40,7 @@ namespace Memoizer.Tests
 
         }
 
-        [Fact(Skip = "Needs scoped caching")]
+        [Fact]
         public void Get__Should_ReturnCorrectInstanceOfCache()
         {
             // ARRANGE

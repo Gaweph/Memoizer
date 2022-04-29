@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 //using System.Runtime.Serialization.Json;
@@ -15,11 +15,12 @@ namespace Memoizer
     {
         private readonly CacheManager cache = new CacheManager();
 
-        public string GetKey(Type type, string methodName, object[] arguments)
+        private string GetKey(object target, Type type, string methodName, object[] arguments)
         {
-            return $"{type.FullName}-{methodName}-{SerializeHelper.Serialize(arguments)}";
+            var id = target?.GetHashCode() ?? 0;
+            return $"{id}-{type.FullName}-{methodName}-{SerializeHelper.Serialize(arguments)}";
         }
-        
+
         [Advice(Kind.Around, Targets = Target.Method)]
         public object HandleMethod(
                [Argument(Source.Name)] string name,
@@ -28,7 +29,7 @@ namespace Memoizer
                [Argument(Source.Triggers)] Attribute[] triggers)
         {
             var type = method.Target?.GetType() ?? method.Method.DeclaringType;
-            var key = GetKey(type, name, arguments);
+            var key = GetKey(method.Target, type, name, arguments);
             lock (cache)
             {
                 if (cache.TryGetCachedValue(key, out var cachedValue))

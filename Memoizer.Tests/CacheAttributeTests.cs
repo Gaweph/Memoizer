@@ -185,7 +185,6 @@ namespace Memoizer.Tests
             // ASSERT
             demo.Count.Should().Be(2);
             res.Should().NotBe(res2);
-        }
-        
+        }             
     }
 }
