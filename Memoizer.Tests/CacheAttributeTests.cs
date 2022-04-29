@@ -41,10 +41,15 @@ namespace Memoizer.Tests
                 return Guid.NewGuid();
             }
 
-            
-
             [Cache]
             public Guid ObjectArgs(object obj)
+            {
+                Count++;
+                return Guid.NewGuid();
+            }
+
+            [Cache]
+            public Guid GenericArg<T>(T obj)
             {
                 Count++;
                 return Guid.NewGuid();
@@ -150,6 +155,36 @@ namespace Memoizer.Tests
             // ASSERT
             demo.Count.Should().Be(1);
             res.Should().Be(res2);
+        }
+
+        [Fact]
+        public void GenericArg__Should_ReturnCachedResult_When_SameInput()
+        {
+            // ARRANGE
+            var demo = new DemoClass();
+
+            // ACT 
+            var res = demo.GenericArg(new { Name = "Dave" });
+            var res2 = demo.GenericArg(new { Name = "Dave" });
+
+            // ASSERT
+            demo.Count.Should().Be(1);
+            res.Should().Be(res2);
+        }
+
+        [Fact]
+        public void GenericArg__Should_ReturnNonCachedResult_When_DiffInput()
+        {
+            // ARRANGE
+            var demo = new DemoClass();
+
+            // ACT 
+            var res = demo.GenericArg(new { Name = "Alice" });
+            var res2 = demo.GenericArg(new { Name = "Bob" });
+
+            // ASSERT
+            demo.Count.Should().Be(2);
+            res.Should().NotBe(res2);
         }
         
     }
