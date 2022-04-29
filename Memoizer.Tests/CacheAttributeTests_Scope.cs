@@ -52,14 +52,14 @@ namespace Memoizer.Tests
             var res2 = demo2.Get();
 
             // ASSERT
-            demo.Count.Should().Be(1);
-            demo2.Count.Should().Be(1);
             res.Payload.Should().Be("abc");
             res2.Payload.Should().Be("xyz");
             res.Guid.Should().NotBe(res2.Guid);
+            demo.Count.Should().Be(1);
+            demo2.Count.Should().Be(1);
         }
         [Fact]
-        public void GetStatic__Should_ReturnCachedVersion_When_CalledOnDIfferentInstances()
+        public void GetStatic__Should_ShareCacheAcrossDifferentInstances()
         {
             // ARRANGE & ACT
             var res = DemoScopeClass.GetStatic();
@@ -70,7 +70,7 @@ namespace Memoizer.Tests
         }
 
         [Fact]
-        public void ExtensionMethod__Should_ReturnCorrectInstanceOfCache()
+        public void ExtensionMethod__Should_ShareCacheAcrossDifferentInstances()
         {
             // ARRANGE
             var demo = new DemoScopeClass("abc");
@@ -81,11 +81,9 @@ namespace Memoizer.Tests
             var res2 = demo2.ExtensionMethod();
 
             // ASSERT
+            res.Should().Be(res2);
             demo.Count.Should().Be(1);
-            demo2.Count.Should().Be(1);
-            res.Payload.Should().Be("abc");
-            res2.Payload.Should().Be("xyz");
-            res.Guid.Should().NotBe(res2.Guid);
+            demo2.Count.Should().Be(0); // Shouldn't have called anything on Demo2
         }
         
     }
