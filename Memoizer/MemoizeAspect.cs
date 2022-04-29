@@ -27,7 +27,8 @@ namespace Memoizer
                [Argument(Source.Target)] Func<object[], object> method,
                [Argument(Source.Triggers)] Attribute[] triggers)
         {
-            var key = GetKey(method.Target.GetType(), name, arguments);
+            var type = method.Target?.GetType() ?? method.Method.DeclaringType;
+            var key = GetKey(type, name, arguments);
             lock (cache)
             {
                 if (cache.TryGetCachedValue(key, out var cachedValue))

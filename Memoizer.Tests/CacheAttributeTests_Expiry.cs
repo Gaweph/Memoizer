@@ -5,9 +5,10 @@ using Xunit;
 
 namespace Memoizer.Tests
 {
-    public class CacheAttributeExpiryTests
+
+    public class CacheAttributeTests_Expiry
     {
-        private class TestExpiryClass
+        private class DemoExpiryClass
         {
             public int Count = 0;
             [Cache(500)]
@@ -29,7 +30,7 @@ namespace Memoizer.Tests
         public async Task HalfSecondCache__Should_ReturnCachedResult_When_CacheNotExpired()
         {
             // ARRANGE
-            var demo = new TestExpiryClass();
+            var demo = new DemoExpiryClass();
             var str = "HalfSecondCache_200";
 
             // ACT 
@@ -46,7 +47,7 @@ namespace Memoizer.Tests
         public async Task HalfSecondCache__Should_ReturnNonCachedResult_When_CacheExpired()
         {
             // ARRANGE
-            var demo = new TestExpiryClass();
+            var demo = new DemoExpiryClass();
             var str = "HalfSecondCache_550";
 
             // ACT 
@@ -63,7 +64,7 @@ namespace Memoizer.Tests
         public async Task OneSecondCache__Should_ReturnCachedResult_When_CacheNotExpired()
         {
             // ARRANGE
-            var demo = new TestExpiryClass();
+            var demo = new DemoExpiryClass();
             var str = "OneSecondCache_500";
 
             // ACT 
@@ -80,7 +81,7 @@ namespace Memoizer.Tests
         public async Task OneSecondCache__Should_ReturnNonCachedResult_When_CacheExpired()
         {
             // ARRANGE
-            var demo = new TestExpiryClass();
+            var demo = new DemoExpiryClass();
             var str = "OneSecondCache_1200";
 
             // ACT 

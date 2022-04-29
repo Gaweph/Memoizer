@@ -8,7 +8,7 @@ namespace Memoizer.Tests
 {
     public class CacheAttributeTests
     {
-        public class DemoClass
+        private class DemoClass
         {
             public int Count = 0;
 
