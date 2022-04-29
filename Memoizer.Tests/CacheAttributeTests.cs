@@ -6,25 +6,28 @@ using Xunit;
 
 namespace Memoizer.Tests
 {
-
     public class CacheAttributeTests
     {
-        public class DemoClass
+        private class DemoClass
         {
-            private int count = 0;
+            public int Count = 0;
 
             [Cache]
-            public int SimpleMethod() => ++count;
-
-            [Cache]
-            public int TestMethod(string str)
+            public Guid SimpleMethod()
             {
-                count++;
-                return count;
+                Count++;
+                return Guid.NewGuid();
             }
 
             [Cache]
-            public int ComplexArgs
+            public Guid TestMethod(string str)
+            {
+                Count++;
+                return Guid.NewGuid();
+            }
+
+            [Cache]
+            public Guid ComplexArgs
                 (
                 object obj,
                 (int Foo, string Bar) tuple,
@@ -34,29 +37,22 @@ namespace Memoizer.Tests
                 string str
                 )
             {
-                count++;
-                return count;
-            }
-
-            [Cache(500)]
-            public int HalfSecondCache(string str)
-            {
-                count++;
-                return count;
-            }
-
-            [Cache(1, Time.Second)]
-            public int OneSecondCache(string str)
-            {
-                count++;
-                return count;
+                Count++;
+                return Guid.NewGuid();
             }
 
             [Cache]
-            public int ObjectArgs(object obj)
+            public Guid ObjectArgs(object obj)
             {
-                count++;
-                return count;
+                Count++;
+                return Guid.NewGuid();
+            }
+
+            [Cache]
+            public Guid GenericArg<T>(T obj)
+            {
+                Count++;
+                return Guid.NewGuid();
             }
         }
 
@@ -72,8 +68,8 @@ namespace Memoizer.Tests
             var res2 = demo.SimpleMethod();
 
             // ASSERT
-            res.Should().Be(1);
-            res2.Should().Be(1);
+            demo.Count.Should().Be(1);
+            res.Should().Be(res2);
         }
 
         [Fact]
@@ -87,8 +83,8 @@ namespace Memoizer.Tests
             var res2 = demo.TestMethod("A");
 
             // ASSERT
-            res.Should().Be(1);
-            res2.Should().Be(1);
+            demo.Count.Should().Be(1);
+            res.Should().Be(res2);
         }
 
         [Fact]
@@ -102,8 +98,8 @@ namespace Memoizer.Tests
             var res2 = demo.TestMethod("Y");
 
             // ASSERT
-            res.Should().Be(1);
-            res2.Should().Be(2);
+            demo.Count.Should().Be(2);
+            res.Should().NotBe(res2);
         }
 
         [Fact]
@@ -123,82 +119,14 @@ namespace Memoizer.Tests
             var res2 = demo.ComplexArgs(obj, tuple, list, arr, guid, str);
 
             // ASSERT
-            res.Should().Be(1);
-            res2.Should().Be(1);
+            demo.Count.Should().Be(1);
+            res.Should().Be(res2);
         }
-
-        [Fact]
-        public async Task HalfSecondCache__Should_ReturnCachedResult_When_CacheNotExpired()
-        {
-            // ARRANGE
-            var demo = new DemoClass();
-            var str = "HalfSecondCache_200";
-
-            // ACT 
-            var res = demo.HalfSecondCache(str);
-            await Task.Delay(200);
-            var res2 = demo.HalfSecondCache(str);
-
-            // ASSERT
-            res.Should().Be(1);
-            res2.Should().Be(1);
-        }
-
-        [Fact]
-        public async Task HalfSecondCache__Should_ReturnNonCachedResult_When_CacheExpired()
-        {
-            // ARRANGE
-            var demo = new DemoClass();
-            var str = "HalfSecondCache_550";
-
-            // ACT 
-            var res = demo.HalfSecondCache(str);
-            await Task.Delay(550);
-            var res2 = demo.HalfSecondCache(str);
-
-            // ASSERT
-            res.Should().Be(1);
-            res2.Should().Be(2);
-        }
-
-        [Fact]
-        public async Task OneSecondCache__Should_ReturnCachedResult_When_CacheNotExpired()
-        {
-            // ARRANGE
-            var demo = new DemoClass();
-            var str = "OneSecondCache_500";
-
-            // ACT 
-            var res = demo.OneSecondCache(str);
-            await Task.Delay(500);
-            var res2 = demo.OneSecondCache(str);
-
-            // ASSERT
-            res.Should().Be(1);
-            res2.Should().Be(1);
-        }
-
-        [Fact]
-        public async Task OneSecondCache__Should_ReturnNonCachedResult_When_CacheExpired()
-        {
-            // ARRANGE
-            var demo = new DemoClass();
-            var str = "OneSecondCache_1200";
-
-            // ACT 
-            var res = demo.OneSecondCache(str);
-            await Task.Delay(1200);
-            var res2 = demo.OneSecondCache(str);
-
-            // ASSERT
-            res.Should().Be(1);
-            res2.Should().Be(2);
-        }
-
-        private class ObjectWithReference
+        
+        private class ObjectWithRecurringReference
         {
             public string Name { get; set; }
-            public ObjectWithReference Object { get; set; }
+            public ObjectWithRecurringReference Object { get; set; }
         }
         [Fact]
         public async Task ObjectArgs__Should_ReturnCachedResult_When_SelfReferencingObject()
@@ -206,26 +134,57 @@ namespace Memoizer.Tests
             // ARRANGE
             var demo = new DemoClass();
 
-            var objA = new ObjectWithReference
+            var objA = new ObjectWithRecurringReference
             {
                 Name = "Object a"
             };
 
-            var objB = new ObjectWithReference
+            var objB = new ObjectWithRecurringReference
             {
-                Name = "Object B",
-                Object = objA
+                Name = "Object B"
             };
 
-            objA.Object = objB; // self referencing - referencing ObjA with reference ObjA again
+            // self referencing 
+            objA.Object = objB;
+            objB.Object = objA;
 
             // ACT 
             var res = demo.ObjectArgs(objA);
             var res2 = demo.ObjectArgs(objA);
 
             // ASSERT
-            res.Should().Be(1);
-            res2.Should().Be(1);
+            demo.Count.Should().Be(1);
+            res.Should().Be(res2);
+        }
+
+        [Fact]
+        public void GenericArg__Should_ReturnCachedResult_When_SameInput()
+        {
+            // ARRANGE
+            var demo = new DemoClass();
+
+            // ACT 
+            var res = demo.GenericArg(new { Name = "Dave" });
+            var res2 = demo.GenericArg(new { Name = "Dave" });
+
+            // ASSERT
+            demo.Count.Should().Be(1);
+            res.Should().Be(res2);
+        }
+
+        [Fact]
+        public void GenericArg__Should_ReturnNonCachedResult_When_DiffInput()
+        {
+            // ARRANGE
+            var demo = new DemoClass();
+
+            // ACT 
+            var res = demo.GenericArg(new { Name = "Alice" });
+            var res2 = demo.GenericArg(new { Name = "Bob" });
+
+            // ASSERT
+            demo.Count.Should().Be(2);
+            res.Should().NotBe(res2);
         }
      
         

@@ -17,7 +17,8 @@ namespace Memoizer
 
         private string GetKey(object target, Type type, string methodName, object[] arguments)
         {
-            return $"{target.GetHashCode()}-{type.FullName}-{methodName}-{SerializeHelper.Serialize(arguments)}";
+            var id = target?.GetHashCode() ?? 0;
+            return $"{id}-{type.FullName}-{methodName}-{SerializeHelper.Serialize(arguments)}";
         }
         
         [Advice(Kind.Around, Targets = Target.Method)]
@@ -27,8 +28,8 @@ namespace Memoizer
                [Argument(Source.Target)] Func<object[], object> method,
                [Argument(Source.Triggers)] Attribute[] triggers)
         {
-            var target = method.Target;
-            var key = GetKey(target, target.GetType(), name, arguments);
+            var type = method.Target?.GetType() ?? method.Method.DeclaringType;
+            var key = GetKey(method.Target, type), name, arguments);
             lock (cache)
             {
                 if (cache.TryGetCachedValue(key, out var cachedValue))
