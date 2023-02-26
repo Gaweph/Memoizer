@@ -1,11 +1,6 @@
 using System;
-using System.IO;
 using System.Linq;
-//using System.Runtime.Serialization.Json;
-//using System.Text;
 using AspectInjector.Broker;
-//using Newtonsoft.Json;
-//using Json.Net
 using System.Runtime.Serialization;
 
 namespace Memoizer
