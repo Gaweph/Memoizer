@@ -18,6 +18,13 @@ namespace Memoizer.Tests
                 return Guid.NewGuid();
             }
 
+            [Cache(0.9, Time.Second)]
+            public Guid UnderOneSecondCache(string str)
+            {
+                Count++;
+                return Guid.NewGuid();
+            }
+
             [Cache(1, Time.Second)]
             public Guid OneSecondCache(string str)
             {
@@ -59,6 +66,24 @@ namespace Memoizer.Tests
             demo.Count.Should().Be(2);
             res.Should().NotBe(res2);
         }
+
+        [Fact]
+        public async Task UnderOneSecondCache__Should_ReturnNonCachedResult_When_CacheExpired()
+        {
+            // ARRANGE
+            var demo = new DemoExpiryClass();
+            var str = "1_Minute_10_Seconds";
+
+            // ACT 
+            var res = demo.UnderOneSecondCache(str);
+            await Task.Delay(1100);
+            var res2 = demo.UnderOneSecondCache(str);
+
+            // ASSERT
+            demo.Count.Should().Be(2);
+            res.Should().NotBe(res2);
+        }
+        
 
         [Fact]
         public async Task OneSecondCache__Should_ReturnCachedResult_When_CacheNotExpired()

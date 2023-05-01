@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using System;
+using System.Linq;
 using Xunit;
 
 namespace Memoizer.Tests
@@ -38,6 +39,31 @@ namespace Memoizer.Tests
                 return Guid.NewGuid();
             }
 
+        }
+
+
+        [Fact]
+        public void Get__Should_ReturnCacchedValue_When_SameInstance()
+        {
+            // ARRANGE
+            var payload = "abc";
+            var demo = new DemoScopeClass(payload);
+
+            // ACT
+            var res1 = demo.Get();
+            var res2 = demo.Get();
+            var res3 = demo.Get();
+            var res4 = demo.Get();
+
+            // ASSERT
+            res1.Payload.Should().Be(payload);
+            res2.Payload.Should().Be(payload);
+            res3.Payload.Should().Be(payload);
+            res4.Payload.Should().Be(payload);
+
+            var guids = new[] { res1.Guid, res2.Guid, res3.Guid, res4.Guid };
+            guids.Distinct().Should().HaveCount(1);
+            demo.Count.Should().Be(1);
         }
 
         [Fact]
